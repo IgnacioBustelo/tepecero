@@ -1,0 +1,12 @@
+CC = gcc
+
+all: tepe
+
+tepe: tepe.c ../libs/conector.c ../libs/log.c
+	$(CC) tepe.c ../libs/conector.c ../libs/log.c -o tepe -lcommons
+	
+debug: CC += -DDEBUG -g
+debug: all
+	
+clean:
+	rm -rf tepe
