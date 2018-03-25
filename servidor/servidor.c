@@ -12,7 +12,7 @@ int main(void)
 	fd_set read_fds;
 
 	FD_ZERO(&connected_fds);
-
+	FD_ZERO(&read_fds);
 	FD_SET(listener, &connected_fds);
 
 	int max_fd = listener;
@@ -43,7 +43,7 @@ int main(void)
 					}
 					log_info(logger, "Socket %d conectado", fd);
 					if (send_hello(new_client_fd) == -1) {
-						remove_fd(fd, &connected_fds);
+						remove_fd(new_client_fd, &connected_fds);
 					}
 				}
 			} else {

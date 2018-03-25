@@ -10,3 +10,4 @@ debug: all
 	
 clean:
 	rm -rf tepe
+	rm -rf cliente.log
