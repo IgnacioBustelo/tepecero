@@ -42,7 +42,7 @@ int main(void)
 						max_fd = new_client_fd;
 					}
 					log_info(logger, "Socket %d conectado", fd);
-					if (send_hello(fd) == -1) {
+					if (send_hello(new_client_fd) == -1) {
 						remove_fd(fd, &connected_fds);
 					}
 				}
