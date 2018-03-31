@@ -69,3 +69,24 @@ void remove_fd(int fd, fd_set *fdset)
 	log_info(logger, "El socket %d fue echado", fd);
 	close(fd);
 }
+
+void send_content(int fd) {
+
+	char* datos = "Hola, capo. ACM1PT";
+	int id = 18;
+	size_t tamanio_dato = strlen(datos) + 1;
+
+	void* paquete = malloc(sizeof(int) + sizeof(size_t) + tamanio_dato);
+
+	memcpy(paquete, &id, sizeof(int));
+	paquete += sizeof(int);
+
+	memcpy(paquete, &tamanio_dato, sizeof(size_t));
+	paquete += sizeof(size_t);
+
+	memcpy(paquete, datos, tamanio_dato);
+	paquete -= sizeof(int) - sizeof(size_t);
+
+	send(fd, paquete, sizeof(int) + sizeof(size_t) + tamanio_dato, 0);
+
+}

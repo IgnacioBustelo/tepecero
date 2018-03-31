@@ -12,3 +12,4 @@
 
 int send_hello(int fd);
 void remove_fd(int fd, fd_set *fdset);
+void send_content(int fd);
