@@ -80,21 +80,22 @@ int send_content(int fd) {
 
 	char* datos = "Hola, capo. ACM1PT";
 	int id = 18;
-	size_t tamanio_dato = strlen(datos) + 1;
+	int tamanio_dato = strlen(datos) + 1;
 
-	void* paquete = malloc(sizeof(int) + sizeof(size_t) + tamanio_dato);
+	void* paquete = malloc(sizeof(id) + sizeof(tamanio_dato) + tamanio_dato);
 
-	memcpy(paquete, &id, sizeof(int));
-	paquete += sizeof(int);
+	memcpy(paquete, &id, sizeof(id));
+	paquete += sizeof(id);
 
-	memcpy(paquete, &tamanio_dato, sizeof(size_t));
-	paquete += sizeof(size_t);
+	memcpy(paquete, &tamanio_dato, sizeof(tamanio_dato));
+	paquete += sizeof(tamanio_dato);
 
 	memcpy(paquete, datos, tamanio_dato);
 	paquete -= sizeof(int) - sizeof(size_t);
 
-	int ret = send(fd, paquete, sizeof(int) + sizeof(size_t) + tamanio_dato, 0);
+	int ret = send(fd, paquete, sizeof(id) + sizeof(tamanio_dato) + tamanio_dato, 0);
 
+	free(paquete);
 	return ret;
 
 }
