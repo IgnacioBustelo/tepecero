@@ -9,8 +9,8 @@ debug: CC += -DDEBUG -g
 debug: all
 
 clean:
-	rm -f servidor 
-	rm servidor.log
+	rm -f servidor servidor.log
+	
 	
 	
 .PHONY: clean
