@@ -41,7 +41,7 @@ int main(void)
 					if (new_client_fd > max_fd) {
 						max_fd = new_client_fd;
 					}
-					log_info(logger, "Socket %d conectado", fd);
+					log_info(logger, "Socket %d conectado", new_client_fd);
 					if (send_hello(new_client_fd) == -1) {
 						remove_fd(new_client_fd, &connected_fds);
 					}
