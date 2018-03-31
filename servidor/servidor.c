@@ -44,7 +44,13 @@ int main(void)
 					log_info(logger, "Socket %d conectado", new_client_fd);
 					if (send_hello(new_client_fd) == -1) {
 						remove_fd(new_client_fd, &connected_fds);
+						log_error(logger, "Fallo en el handshake con el Socket %d", new_client_fd);
 					}
+					if (send_content(new_client_fd) == -1) {
+						remove_fd(new_client_fd, &connected_fds);
+						log_error(logger, "Envío fallido de mensaje al Socket %d", new_client_fd);
+					}
+					log_info(logger, "Se envió un mensaje correctamente al Socket %d", new_client_fd);
 				}
 			} else {
 
@@ -70,7 +76,7 @@ void remove_fd(int fd, fd_set *fdset)
 	close(fd);
 }
 
-void send_content(int fd) {
+int send_content(int fd) {
 
 	char* datos = "Hola, capo. ACM1PT";
 	int id = 18;
@@ -87,6 +93,8 @@ void send_content(int fd) {
 	memcpy(paquete, datos, tamanio_dato);
 	paquete -= sizeof(int) - sizeof(size_t);
 
-	send(fd, paquete, sizeof(int) + sizeof(size_t) + tamanio_dato, 0);
+	int ret = send(fd, paquete, sizeof(int) + sizeof(size_t) + tamanio_dato, 0);
+
+	return ret;
 
 }
