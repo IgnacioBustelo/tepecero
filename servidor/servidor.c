@@ -51,6 +51,16 @@ int main(void)
 						log_error(logger, "Envío fallido de mensaje al Socket %d", new_client_fd);
 					}
 					log_info(logger, "Se envió un mensaje correctamente al Socket %d", new_client_fd);
+
+					int ret = recv_md5(fd);
+
+					if(ret < 0) {
+						log_error(logger, "Fallo en el recibo del mensaje del Socket %d", new_client_fd);
+						send_confirmation(fd, 0);
+					}
+
+					send_confirmation(fd, 1);
+
 				}
 			} else {
 
@@ -91,11 +101,40 @@ int send_content(int fd) {
 	paquete += sizeof(tamanio_dato);
 
 	memcpy(paquete, datos, tamanio_dato);
-	paquete -= sizeof(int) - sizeof(size_t);
+	paquete -= sizeof(int) + sizeof(tamanio_dato);
 
 	int ret = send(fd, paquete, sizeof(id) + sizeof(tamanio_dato) + tamanio_dato, 0);
 
 	free(paquete);
 	return ret;
+
+}
+
+int recv_md5(int fd) {
+
+	int id, ret;
+	size_t size;
+	void* md5;
+
+	ret = recv(fd, &id, sizeof(id), MSG_WAITALL);
+	if(ret <= 0) return ret;
+
+	ret = recv(fd, &size, sizeof(size), MSG_WAITALL);
+	if(ret <= 0) return ret;
+
+	ret = recv(fd, &md5, size, MSG_WAITALL);
+	if(ret <= 0) return ret;
+
+	log_info(logger, "Recibido mensaje encriptado = &s", md5);
+
+	free(md5);
+
+	return ret;
+
+}
+
+int send_confirmation(int fd, int ret) {
+
+	return send(fd, &ret, sizeof(ret), 0);
 
 }

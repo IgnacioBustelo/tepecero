@@ -13,3 +13,5 @@
 int send_hello(int fd);
 void remove_fd(int fd, fd_set *fdset);
 int send_content(int fd);
+int recv_md5(int fd);
+int send_confirmation(int fd, int ret);
