@@ -52,7 +52,7 @@ int main(void)
 					}
 					log_info(logger, "Se envió un mensaje correctamente al Socket %d", new_client_fd);
 
-					int ret = recv_md5(fd);
+					int ret = recv_md5(new_client_fd);
 
 					switch(ret)
 					{
