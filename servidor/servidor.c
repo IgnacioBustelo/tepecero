@@ -101,7 +101,7 @@ int send_content(int fd) {
 	paquete += sizeof(tamanio_dato);
 
 	memcpy(paquete, datos, tamanio_dato);
-	paquete -= sizeof(int) + sizeof(tamanio_dato);
+	paquete -= sizeof(id) + sizeof(tamanio_dato);
 
 	int ret = send(fd, paquete, sizeof(id) + sizeof(tamanio_dato) + tamanio_dato, 0);
 

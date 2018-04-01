@@ -10,7 +10,5 @@ debug: all
 
 clean:
 	rm -f servidor servidor.log
-	
-	
-	
+
 .PHONY: clean
