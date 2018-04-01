@@ -113,7 +113,7 @@ int send_content(int fd) {
 int recv_md5(int fd) {
 
 	int id, ret;
-	size_t size;
+	int size;
 	void* md5;
 
 	ret = recv(fd, &id, sizeof(id), MSG_WAITALL);
