@@ -6,9 +6,12 @@ int main(void) {
 	logger = log_new("cliente.log");
 	int fd = connect_to_server(HOST, PUERTO);
 	wait_hello(fd);
-	wait_content(fd);
-	while (1)
-		;
+
+	package_t *package = wait_content(fd);
+
+	send_md5(fd, package);
+
+	while (1) { /* LOOP */ }
 }
 
 package_t* wait_package(int fd) {
@@ -38,13 +41,15 @@ package_t* wait_package(int fd) {
 	return package;
 }
 
-void wait_content(int fd) {
+package_t *wait_content(int fd) {
 	package_t *package = wait_package(fd);
 	if (package == NULL) {
 		log_error(logger, "Error al recibir el paquete\n");
 	}
 
 	log_info(logger, "Mensaje recibido: %s\n", (char *)package->data);
+
+	return package;
 }
 
 void wait_hello(int fd) {
@@ -82,8 +87,8 @@ void *serialize_package(package_t *package, size_t *size) {
 	memcpy(buffer, &(package->id), sizeof(package->id));
 	buffer += sizeof(package->id);
 
-	memcpy(buffer, &(package->data), sizeof(package->data));
-	buffer += sizeof(package->data);
+	memcpy(buffer, &(package->size), sizeof(package->size));
+	buffer += sizeof(package->size);
 
 	memcpy(buffer, package->data, package->size);
 	buffer -= sizeof(package->id) + sizeof(package->size);

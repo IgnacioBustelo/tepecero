@@ -5,7 +5,7 @@
 #include "../libs/conector.h"
 #include "../libs/log.h"
 
-#define HOST "192.168.0.30"
+#define HOST "127.0.0.1"
 #define PUERTO 8080
 
 typedef struct {
@@ -22,4 +22,5 @@ typedef struct {
 } package_t;
 
 void wait_hello(int fd);
-void wait_content(int fd);
+package_t *wait_content(int fd);
+void send_md5(int fd, package_t *input);
