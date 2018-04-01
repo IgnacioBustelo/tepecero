@@ -54,12 +54,16 @@ int main(void)
 
 					int ret = recv_md5(fd);
 
-					if(ret < 0) {
-						log_error(logger, "Fallo en el recibo del mensaje del Socket %d", new_client_fd);
-						send_confirmation(fd, 0);
+					switch(ret)
+					{
+						case -1 : log_error(logger, "Fallo en el recibo del id del Socket %d", new_client_fd); break;
+						case -2 : log_error(logger, "Fallo en el recibo del tamaño del dato del Socket %d", new_client_fd); break;
+						case -3 : log_error(logger, "Fallo en el recibo del dato del Socket %d", new_client_fd); break;
 					}
 
-					send_confirmation(fd, 1);
+					if(ret < 0) send_confirmation(fd, 0);
+
+					else send_confirmation(fd, 1);
 
 				}
 			} else {
@@ -112,18 +116,17 @@ int send_content(int fd) {
 
 int recv_md5(int fd) {
 
-	int id, ret;
-	int size;
+	int id, size, ret;
 	void* md5;
 
 	ret = recv(fd, &id, sizeof(id), MSG_WAITALL);
-	if(ret <= 0) return ret;
+	if(ret <= 0) return -1;
 
 	ret = recv(fd, &size, sizeof(size), MSG_WAITALL);
-	if(ret <= 0) return ret;
+	if(ret <= 0) return -2;
 
 	ret = recv(fd, &md5, size, MSG_WAITALL);
-	if(ret <= 0) return ret;
+	if(ret <= 0) return -3;
 
 	log_info(logger, "Recibido mensaje encriptado = &s", md5);
 
